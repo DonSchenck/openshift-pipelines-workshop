@@ -1,7 +1,7 @@
 # openshift-pipelines-workshop
 Workshop to demonstrate OpenShift Pipelines (featuring Tekton).
 
-All are welcome: Linux, macOS and Windows.
+**All** are welcome: Linux, macOS and Windows.
 
 ## Description
 This workshop will guide you through the creation, execution and ongoing use of OpenShift Pipelines, a CI/CD instance that runs in an OpenShift cluster. You will learn how OpenShift Pipelines are installed, how they are configured, how they are run, how to handle the results, and how to continue a development cycle using this CI/CD environment.
