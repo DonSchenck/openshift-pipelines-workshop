@@ -87,6 +87,8 @@ Before any work can begin, you must be logged into your OpenShift cluster with c
 
 ### Workshop Step 1: Create projects
 
+oc new-project pipelines-tutorial
+
 
 ### Workshop Step 2: Install operator  
 ### Workshop Step 3: Create subscription  
