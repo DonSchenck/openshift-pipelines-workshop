@@ -87,13 +87,30 @@ Before any work can begin, you must be logged into your OpenShift cluster with c
 
 ### Workshop Step 1: Create projects
 
-oc new-project pipelines-tutorial
+`oc new-project pipelines-tutorial`
 
 
-### Workshop Step 2: Install operator  
+### Workshop Step 2: Install operator
+You have two choices: Use the web UI dashboard or use the command line.  
+
+#### Installing Pipelines operator using the Web UI dashboard
+
+*TODO* Screen shots and instructions here
+
+#### Installing the Pipelines operator using the command line.  
+
+`oc adm policy add-scc-to-user anyuid -z tekton-pipelines-controller`  
+
+
+
+
 ### Workshop Step 3: Create subscription  
+`oc apply --filename https://storage.googleapis.com/tekton-releases/latest/release.yaml`  
+
 ### Workshop Step 4: Create pipeline  
+`oc apply -f echo-hello-world-task-run.yaml`  
 ### Workshop Step 5: Create tasks  
+`oc apply -f echo-hello-world-task.yaml`  
 ### Workshop Step 6: Run pipeline  
 ### Workshop Step 7: View results  
 ### Workshop Optional Step 8: Alter source code  
@@ -115,12 +132,7 @@ Next, create a project where we'll run Tekton:
 
 Install OpenShift Pipelines  
 
-You can use the dashboard.
-You can use the command line.
-`oc adm policy add-scc-to-user anyuid -z tekton-pipelines-controller`
-`oc apply --filename https://storage.googleapis.com/tekton-releases/latest/release.yaml`
-`oc apply -f echo-hello-world-task.yaml`
-`oc apply -f echo-hello-world-task-run.yaml`
+
 
 *TODO* Make sure the tkn cli tool is installed.
 
