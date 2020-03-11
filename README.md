@@ -105,4 +105,65 @@ oc new-project pipelines-tutorial
 
 
 
-We'll start by creating an OpenShift cluster. We have several options, but I'm going to use a public cloud provider in order to mimic a real development environment as closely as possible. In other words, I'm not running it locally on my PC where only I can use it. I want this to be realistic../openshift create clusterNext, create a project where we'll run Tekton:oc new-project tekton-pipelines --display-name='Tekton Pipelines'Install OpenShift PipelinesYou can use the dashboard.You can use the command line.oc adm policy add-scc-to-user anyuid -z tekton-pipelines-controlleroc apply --filename https://storage.googleapis.com/tekton-releases/latest/release.yamloc apply -f echo-hello-world-task.yamloc apply -f echo-hello-world-task-run.yaml*TODO* Make sure the tkn cli tool is installed.Tekton uses Kubernetes Custom Resources, which are defined using a YAML file. That definition, the Custom Resource Definition, is commonly referred to by the acronym "CRD". You'll see that a lot when working with Kubernetes. A lot.Tekton needs CRDs for the following five parts:TaskPipelineResourcePipelineTaskRunPipelineRunTasks are the pieces of a PipelineResource. It runs in a pod. Examples are Build a web service, deploy the web service. A Task is a "kind" of CRD. It defines the work and may contain multiple steps. The steps are executed in a sequential manner, and cumulatively they make up the Task. Think of the following sequence: Build the app, test the app, deploy the app. These would be (three) separate tasks.A Task has inputs and outputs. The input comes in the form of Parameters and PipelineResources. For example, the Task will need to know the path to the code to be used for compiling, or the location of a Dockerfile for building an image. In the latter case, the output would be a Linux image.How does it work? A pod is created for a task, the task is executed, and the results are delivered.PipelineA list of tasks the defines the order of operation and links outputs and inputs. Multitasking is supported.PipelineResourceDefines type of input, for example, the location of the git repo. Typically types are "git" and "image".TaskRunInstance of a Task and binds outputs and input, sets values of any parameters and executes the Task steps.PipelineRunInstance of a Pipeline, binds outputs and inputs, creates and executes TaskRun objects and collects the results.Example with two web servicesStep 1. BuildPull source codeBuild imagePush imageThis is all defined by the Pipeline Resource, which accepts source code as the input and delivers a container image.Step 2. DeploymentAnother PipelineResource with two tasks: Update the deployment manifest and create the deployment. The input is the container image from step 1 and the output is a web service.PipelineThe above two steps, which are defined as PipelineResource classes, are combined to make up our Pipeline.
+We'll start by creating an OpenShift cluster. We have several options, but I'm going to use a public cloud provider in order to mimic a real development environment as closely as possible. In other words, I'm not running it locally on my PC where only I can use it. I want this to be realistic.  
+
+`./openshift create cluster`  
+
+Next, create a project where we'll run Tekton:
+
+`oc new-project tekton-pipelines --display-name='Tekton Pipelines'`  
+
+Install OpenShift Pipelines  
+
+You can use the dashboard.
+You can use the command line.
+`oc adm policy add-scc-to-user anyuid -z tekton-pipelines-controller`
+`oc apply --filename https://storage.googleapis.com/tekton-releases/latest/release.yaml`
+`oc apply -f echo-hello-world-task.yaml`
+`oc apply -f echo-hello-world-task-run.yaml`
+
+*TODO* Make sure the tkn cli tool is installed.
+
+Tekton uses Kubernetes Custom Resources, which are defined using a YAML file. That definition, the Custom Resource Definition, is commonly referred to by the acronym "CRD". You'll see that a lot when working with Kubernetes. A lot.  
+
+Tekton needs CRDs for the following five parts:   
+
+Task  
+Pipeline  
+ResourcePipeline  
+TaskRun  
+PipelineRun  
+
+Tasks are the pieces of a PipelineResource. It runs in a pod. Examples are Build a web service, deploy the web service. A Task is a "kind" of CRD. It defines the work and may contain multiple steps. The steps are executed in a sequential manner, and cumulatively they make up the Task. Think of the following sequence:  
+Build the app,   
+test the app,   
+deploy the app.   
+
+These would be (three) separate tasks.  
+
+A Task has inputs and outputs. The input comes in the form of Parameters and PipelineResources. For example, the Task will need to know the path to the code to be used for compiling, or the location of a Dockerfile for building an image. In the latter case, the output would be a Linux image.How does it work? A pod is created for a task, the task is executed, and the results are delivered.
+
+Pipeline
+A list of tasks that defines the order of operation and links outputs and inputs. Multitasking is supported.  
+
+PipelineResource  
+Defines type of input, for example, the location of the git repo. Typically types are "git" and "image".  
+
+TaskRun  
+Instance of a Task and binds outputs and input, sets values of any parameters and executes the Task steps.  
+
+PipelineRun  
+Instance of a Pipeline, binds outputs and inputs, creates and executes TaskRun objects and collects the results.Example with two web services  
+
+Step 1. 
+Build  
+Pull source code  
+Build image  
+Push image  
+This is all defined by the Pipeline Resource, which accepts source code as the input and delivers a container image.  
+
+Step 2. Deployment  
+Another PipelineResource with two tasks: Update the deployment manifest and create the deployment. The input is the container image from step 1 and the output is a web service.  
+
+Pipeline  
+The above two steps, which are defined as PipelineResource classes, are combined to make up our Pipeline.
