@@ -1,0 +1,17 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: golang-build
+spec:
+  inputs:
+    resources:
+    - name: workspace-git
+      targetPath: /
+      type: git
+  steps:
+  - name: build
+    image: golang:latest
+    command:
+    - go 
+    args:
+    - build
