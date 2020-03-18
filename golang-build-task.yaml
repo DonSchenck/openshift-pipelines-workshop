@@ -5,9 +5,14 @@ metadata:
 spec:
   inputs:
     resources:
-    - name: workspace-git
+    - name: qotd-git
       targetPath: /
       type: git
+  outputs:
+    resources:
+    - name: qotd-image
+      targetPath: qotd:v1
+      type: image
   steps:
   - name: build
     image: golang:latest
